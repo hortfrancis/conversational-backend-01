@@ -4,10 +4,14 @@ const anthropic = new Anthropic({
     apiKey: process.env['ANTHROPIC_API_KEY'],
 });
 
-async function generateText(model, systemMessage, messages) {
+async function promptClaude(model, systemMessage, messages) {
     if (!model || !systemMessage || !messages) {
         throw new Error("Missing required parameters to generate text completion.");
     }
+
+    console.log("model:", model);
+    console.log("systemMessage:", systemMessage);
+    console.log("messages:", messages);
 
     try {
         return await anthropic.messages.create({
@@ -22,4 +26,4 @@ async function generateText(model, systemMessage, messages) {
     }
 }
 
-module.exports = { generateText };
+module.exports = { promptClaude };
