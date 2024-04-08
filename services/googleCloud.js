@@ -22,7 +22,7 @@ async function speechToText(audioData, languageCode) {
         const [response] = await client.recognize(request);
         const transcripts = response.results.map(
             (result) => result.alternatives[0].transcript
-        );
+        )[0];
         console.log(transcripts);
         return transcripts;
     } catch (error) {
