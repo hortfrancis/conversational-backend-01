@@ -8,19 +8,20 @@ async function speechToSpeech(req, res) {
         console.log('req.body:', req.body);
         const message = JSON.parse(req.body.message);
 
+        // Greet screen 
         if (message.task === 'greet-proceed-choose') {
-            const englishTranscription = await transcribeEnglish(userSpeech);
-            console.log("English transcription:", englishTranscription);
-            const reply = await greetProceedChoose(englishTranscription);
-            console.log("reply from greetProceedChoose:", reply);
-
+            const reply = await greetProceedChoose(await transcribeEnglish(userSpeech));
+            res.status(200).json({ learn: reply });
         }
 
+        // Choose an activity
+        if (message.task === 'choose-activity') {
+            res.status(200).json({ message: "No other activities supported yet!" });
+        }
 
-        // res.status(200).json({ transcription: englishTranscription });
     } catch (error) {
         console.error("Error transcribing speech:", error);
-        res.status(500).json({ error: "Error transcribing speech" });
+        res.status(500).json({ error: `Error transcribing speech: ${error}` });
     }
 }
 
