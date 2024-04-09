@@ -16,7 +16,7 @@ async function speechToSpeech(req, res) {
 
     } catch (error) {
         console.error("Error transcribing speech:", error);
-        res.status(500).json({ error: "Error transcribing speech" });
+        res.status(500).json({ error: `Error transcribing speech: ${error}` });
     }
 }
 
