@@ -14,6 +14,11 @@ async function speechToSpeech(req, res) {
             res.status(200).json({ learn: reply });
         }
 
+        // Choose an activity
+        if (message.task === 'choose-activity') {
+            res.status(200).json({ message: "No other activities supported yet!" });
+        }
+
     } catch (error) {
         console.error("Error transcribing speech:", error);
         res.status(500).json({ error: `Error transcribing speech: ${error}` });

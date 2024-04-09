@@ -9,9 +9,9 @@ async function promptClaude(model, systemMessage, messages) {
         throw new Error("Missing required parameters to generate text completion.");
     }
 
-    console.log("model:", model);
-    console.log("systemMessage:", systemMessage);
-    console.log("messages:", messages);
+    // console.log("model:", model);
+    // console.log("systemMessage:", systemMessage);
+    // console.log("messages:", messages);
 
     try {
         return await anthropic.messages.create({
