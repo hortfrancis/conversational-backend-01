@@ -1,5 +1,6 @@
 const { transcribeEnglish, transcribeUkrainian } = require("../services/googleCloud");
-const { greetProceedChoose } = require("../lib");
+const { generateSpeech } = require("../services/elevenlabs");
+const { greetProceedChoose, evaluatePronunciation } = require("../lib");
 
 
 async function speechToSpeech(req, res) {
@@ -10,8 +11,29 @@ async function speechToSpeech(req, res) {
 
         // Greet screen 
         if (message.task === 'greet-proceed-choose') {
-            const reply = await greetProceedChoose(await transcribeEnglish(userSpeech));
+            // const reply = await greetProceedChoose(await transcribeEnglish(userSpeech));
+            // Dev temporarily hardcoding the reply
+            const reply = true;
             res.status(200).json({ learn: reply });
+        }
+
+        if (message.task === 'say-pryvit') {
+            const reply = await evaluatePronunciation(await transcribeUkrainian(userSpeech));
+            if (reply.understood) {
+                const generatedSpeech = await generateSpeech("Great! You have said ‘hello’ in Ukrainian!");
+                res.status(200).json({
+                    understood: true,
+                    assistantText: "Great! You have said ‘hello’ in Ukrainian!",
+                    assistantAudio: generatedSpeech.toString('base64')
+                });
+            } else {
+                const generatedSpeech = await generateSpeech(reply.guidance);
+                res.status(200).json({
+                    understood: false,
+                    assistantText: reply.guidance,
+                    assistantAudio: generatedSpeech.toString('base64')
+                });
+            }
         }
 
         // Choose an activity
