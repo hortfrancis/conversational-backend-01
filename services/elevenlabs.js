@@ -7,13 +7,20 @@ const elevenlabs = new ElevenLabsClient({
 async function generateSpeech(text) {
     try {
         // Returns a passthrough stream
-        return await elevenlabs.generate({
+        const stream = await elevenlabs.generate({
             voice: "OpAJAp5k26n0f4nVatQW",
             text: text,
             model_id: "eleven_multilingual_v2",
         });
+
+        const chunks = [];
+        for await (const chunk of stream) {
+            chunks.push(chunk);
+        }
+        return Buffer.concat(chunks);
     } catch (error) {
         console.error("Error generating speech audio:", error);
+        throw error;
     }
 }
 
