@@ -21,7 +21,9 @@ async function speechToText(audioData, languageCode) {
         const [response] = await client.recognize(request);
 
         if (response.results.length === 0) {
-            throw new Error("No speech detected.");
+            const error = new Error("No speech detected.");
+            error.code = 'NO_SPEECH_DETECTED';
+            throw error;
         }
 
         const transcripts = response.results.map(
