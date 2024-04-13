@@ -11,9 +11,7 @@ async function speechToSpeech(req, res) {
 
         // Greet screen 
         if (message.task === 'greet-proceed-choose') {
-            // const reply = await greetProceedChoose(await transcribeEnglish(userSpeech));
-            // Dev temporarily hardcoding the reply
-            const reply = true;
+            const reply = await greetProceedChoose(await transcribeEnglish(userSpeech));
             res.status(200).json({ learn: reply });
         }
 
@@ -43,6 +41,11 @@ async function speechToSpeech(req, res) {
 
     } catch (error) {
         console.error("Error transcribing speech:", error);
+
+        if (error.code === 'NO_SPEECH_DETECTED') {
+            return res.status(400).json({ error: 'NO_SPEECH_DETECTED' });
+        }
+
         res.status(500).json({ error: `Error transcribing speech: ${error}` });
     }
 }
